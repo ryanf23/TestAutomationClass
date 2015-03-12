@@ -2,7 +2,7 @@
 // Copyright © 2014. All rights reserved.
 // </copyright>
 
-namespace YourName.ProjectName
+namespace FinalProjectTeam3
 {
     using System;
     using System.Diagnostics;
