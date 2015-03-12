@@ -54,6 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TEDnotepadHelper.cs" />
     <Compile Include="TestDriver.cs" />
+    <Compile Include="TestSuite - Peter.cs" />
+    <Compile Include="TestSuite - Ryan.cs" />
+    <Compile Include="TestSuite - Sahana.cs" />
     <Compile Include="TestSuite.cs" />
   </ItemGroup>
   <ItemGroup>
