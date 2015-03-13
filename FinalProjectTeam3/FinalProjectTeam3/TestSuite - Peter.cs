@@ -1,4 +1,4 @@
-﻿// <copyright file="TestSuite.cs" company="[YourName]">
+﻿// <copyright file="TestSuite.cs" company="[petsan]">
 // Copyright © 2014. All rights reserved.
 // </copyright>
 
