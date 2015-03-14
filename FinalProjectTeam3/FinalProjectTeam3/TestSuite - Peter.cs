@@ -12,7 +12,7 @@ namespace FinalProjectTeam3
     /// <summary>
     /// Test suite for [project name] 
     /// </summary>
-    public class TestSuite : TestBase
+    public class TestSuitePeter : TestBase
     {
         /// <summary>
         /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]

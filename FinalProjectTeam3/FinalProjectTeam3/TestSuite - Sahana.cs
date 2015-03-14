@@ -12,7 +12,7 @@ namespace FinalProjectTeam3
     /// <summary>
     /// Test suite for [project name] 
     /// </summary>
-    public class TestSuite : TestBase
+    public class TestSuiteSahana : TestBase
     {
         /// <summary>
         /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]
@@ -29,6 +29,8 @@ namespace FinalProjectTeam3
                 this.Initialize();
 
                 // TODO: add code here for test
+
+                // test sample
 
                 this.Cleanup();
             }

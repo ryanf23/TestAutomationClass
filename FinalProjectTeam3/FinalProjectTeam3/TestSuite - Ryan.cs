@@ -12,7 +12,7 @@ namespace FinalProjectTeam3
     /// <summary>
     /// Test suite for [project name] 
     /// </summary>
-    public class TestSuite : TestBase
+    public class TestSuiteRyan : TestBase
     {
         /// <summary>
         /// TEST OBJECTIVE: Open the Ted Notepad application, enter some text and save the file
