@@ -15,20 +15,26 @@ namespace FinalProjectTeam3
     public class TestSuite : TestBase
     {
         /// <summary>
-        /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]
-        /// SETUP: [Information regarding machine state, test data, tools, etc for test to run.] 
+        /// TEST OBJECTIVE: Open the Ted Notepad application, enter some text and save the file
+        /// SETUP: Use a test data file for entering the data for use in other tests 
         /// STEPS:
-        /// 1. [Step 1]
-        /// 2. [Step 2, etc.]
-        /// EXPECTED RESULT: [Expected outcome of test]
+        /// 1. Launch application 
+        /// 2. Enter some data
+        /// 3. Save the file 
+        /// EXPECTED RESULT: The file has been saved
         /// </summary>
-        public void TestMethod()
+        public void SaveTedNotepadFile()
         {
             try
             {
                 this.Initialize();
 
-                // TODO: add code here for test
+                //Open the Ted application 
+
+                //Create some text to enter
+
+                //Save the file
+                
 
                 this.Cleanup();
             }
