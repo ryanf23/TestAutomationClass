@@ -19,7 +19,7 @@ namespace FinalProjectTeam3
         static void Main()
         {
             // Initializes the test suite
-            TestSuite test = new TestSuite();
+            TestSuiteSahana test = new TestSuiteSahana();
 
             Stopwatch timer = new Stopwatch();
             timer.Start();

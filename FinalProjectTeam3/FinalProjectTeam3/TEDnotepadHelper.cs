@@ -98,5 +98,27 @@ namespace FinalProjectTeam3
             SelecttoNext2 = 16,
             SelecttoPrevious2 = 17
         }
+
+        public enum ToolMenuItems
+        {
+            LastTool=0,
+            Case=1,
+            Lines=2,
+            Text=3,
+            Reverse=4,
+            Sort=5,
+            Wrap=6,
+            TextFilters=7
+        }
+
+        public enum CaseMenuItems
+        {
+            AllLowerCase=0,
+            AllUpperCase=1,
+            CaseInversion=2,
+            WordCapitals=3,
+            FirstCapital=4
+        }
+
     }
 }
