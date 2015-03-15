@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace FinalProjectTeam3
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using TestingMentor.TestAutomationFramework;
+    using System.Windows.Forms;
+    using System.IO;
+
     class TEDnotepadHelper
     {
         public enum OpenDialog
@@ -120,5 +124,65 @@ namespace FinalProjectTeam3
             FirstCapital=4
         }
 
+        /// <summary>
+        /// Method to save a file by manipulating menu items via accelerator key mnemonics
+        /// </summary>
+        /// <param name="filename">Filename to save</param>
+        public static void SaveTedFile(string filename)
+        {
+            int pollCount = 0;
+            int maxPollCount = 50;
+
+            Logger.Comment("Open save dialog");
+            SendKeys.SendWait("^s");
+
+            // Sleep used to wait for dialog to open
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+
+            Logger.Comment("set filename");
+            SendKeys.SendWait("%n");
+            SendKeys.SendWait(filename);
+
+            // Sleep used for sendkeys delay
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+
+            Logger.Comment("save as text file");
+            SendKeys.SendWait("%t");
+            SendKeys.SendWait("t");
+
+            Logger.Comment("save file");
+            SendKeys.SendWait("{ENTER}");
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(500));
+
+            while (!File.Exists(filename + ".txt") && pollCount < maxPollCount)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+                pollCount++;
+            }
+
+            if (!File.Exists(filename))
+            {
+                throw new ArgumentException("Test file not created.");
+            }
+        }
+
+        public static void OpenFile(string filename)
+        {
+            Logger.Comment("Open file dialog");
+            SendKeys.SendWait("^o");
+
+            // Sleep used to wait for dialog to open
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+
+            Logger.Comment("Set filename to textbox");
+            SendKeys.SendWait("%n");
+            SendKeys.SendWait(filename);
+
+            // Sleep used for sendkeys
+            System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+
+            Logger.Comment("Open file");
+            SendKeys.SendWait("%o");
+        }
     }
 }

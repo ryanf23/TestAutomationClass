@@ -17,6 +17,8 @@ namespace FinalProjectTeam3
     /// </summary>
     public class TestSuiteSahana : TestBase
     {
+        private readonly string path = "C:\\Sahana\\TestData\\";
+
         /// <summary>
         /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]
         /// SETUP: [Information regarding machine state, test data, tools, etc for test to run.] 
@@ -29,25 +31,51 @@ namespace FinalProjectTeam3
         {
             try
             {
-               this.Initialize();
-               this.Initialize();
+                this.Initialize();
+                //Create a test file and save it to the test directory
 
-               string notepadApplication = "C:\\Sahana\\TestData\\TedNPad.exe";               
+                string TedpadApplication = path + "TedNPad.exe";
+                Logger.TestStep("Launch Notepad");
+                Process TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
 
-               Logger.TestStep("Launch Notepad");
-               Process notepadProcess = ProcessHelper.LaunchApplication(notepadApplication);
+                Logger.Comment("Get multiine text");
+                //Get string for editor
+                string text = GetMultiLineTextForEditor();
 
-               Logger.Comment("Get multiine text");
-               //Get string for editor
-               string text = GetMultiLineTextForEditor();               
+                Logger.TestStep("Send text to TedPad edit control");
+                SendKeys.SendWait(text);
 
-               Logger.TestStep("Send text to Notepad edit control");
-               SendKeys.SendWait(text);
+                // SendKeys is slow...so we need to sleep to allow text to get entered into edit window
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                Logger.TestStep("Save file as Unicode encoding with random file name");
+                string filename = Path.Combine(Environment.GetFolderPath(
+                    Environment.SpecialFolder.Desktop),
+                    Path.GetRandomFileName() + ".txt");
+
+                Logger.TestStep("Save TedPad as text file");
+                TEDnotepadHelper.SaveTedFile(filename);
+
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                Logger.TestStep("Close TedPad");
+                ProcessHelper.CloseApplication(TedpadProcess);
 
 
-                                             
-               Console.WriteLine(string.Format("Generated string Value: {0}", text));               
-               Console.ReadLine();
+                Logger.TestStep("Launch TedPad app");
+                TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
+
+                Logger.TestStep("Open test file");
+                TEDnotepadHelper.OpenFile(filename);
+                
+                Logger.Comment("Close TedPad");
+                ProcessHelper.CloseApplication(TedpadProcess);  
+                //Test case operation
+                ////Logger.TestStep("commad to convert to upper");
+                ////SendKeys.SendWait("^+U");                
+
+                ////Console.WriteLine(string.Format("Generated string Value: {0}", text));               
+                ////Console.ReadLine();
                 this.Cleanup();
             }
             catch (Exception error)
@@ -60,11 +88,11 @@ namespace FinalProjectTeam3
 
         private static string GetMultiLineTextForEditor()
         {
-            int seedValue;            
-            string firstLine = GetTextString(15,out seedValue);
-            string secondLine = GetTextString(20,out seedValue);
+            int seedValue;
+            string firstLine = GetTextString(15, out seedValue);
+            string secondLine = GetTextString(20, out seedValue);
             string thirdLine = GetTextString(50, out seedValue);
-            string FinalText = string.Concat(firstLine, " ",secondLine, secondLine,System.Environment.NewLine,thirdLine);            
+            string FinalText = string.Concat(firstLine, " ", secondLine, secondLine, System.Environment.NewLine, thirdLine);
             return FinalText;
         }
 
@@ -74,7 +102,7 @@ namespace FinalProjectTeam3
         /// </summary>
         /// <param name="seed">Seed value</param>
         /// <returns>A string of unicode characters</returns>
-        private static string GetTextString(int maxCharCount,out int seed)
+        private static string GetTextString(int maxCharCount, out int seed)
         {
             Random prng = new Random();
             seed = prng.Next();
@@ -89,7 +117,7 @@ namespace FinalProjectTeam3
             sg.Info.UseCustomRange = true;
             sg.Info.CustomUnicodeStartRange = '0';
             sg.Info.CustomUnicodeEndRange = 'z';
-            sg.Info.AllowNumberCharacters = true; 
+            sg.Info.AllowNumberCharacters = true;
             return sg.Polyglot();
         }
 
@@ -100,7 +128,7 @@ namespace FinalProjectTeam3
         /// <returns>A string of unicode characters</returns>
         private static string GetUnicodeStringSeed(int seed)
         {
-            Random prng = new Random();            
+            Random prng = new Random();
             StringGenerator sg = new StringGenerator();
             sg.Info.IsSendKeysSafe = true;
             sg.Info.Seed = seed;
@@ -112,7 +140,7 @@ namespace FinalProjectTeam3
             sg.Info.UseCustomRange = true;
             sg.Info.CustomUnicodeStartRange = '0';
             sg.Info.CustomUnicodeEndRange = 'z';
-            sg.Info.AllowNumberCharacters = true; 
+            sg.Info.AllowNumberCharacters = true;
             return sg.Polyglot();
         }
 
