@@ -35,7 +35,7 @@ namespace FinalProjectTeam3
                 //Create a test file and save it to the test directory
 
                 string TedpadApplication = path + "TedNPad.exe";
-                Logger.TestStep("Launch Notepad");
+                Logger.TestStep("Launch TedPad");
                 Process TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
 
                 Logger.Comment("Get multiine text");
@@ -48,25 +48,41 @@ namespace FinalProjectTeam3
                 // SendKeys is slow...so we need to sleep to allow text to get entered into edit window
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
 
-                Logger.TestStep("Save file as Unicode encoding with random file name");
-                string filename = Path.Combine(Environment.GetFolderPath(
-                    Environment.SpecialFolder.Desktop),
-                    Path.GetRandomFileName() + ".txt");
+                Logger.Comment("Get Tednotepad window handle.");
+                IntPtr TedpadHandle = ProcessHelper.GetMainForegroundWindowHandle();
 
-                Logger.TestStep("Save TedPad as text file");
-                TEDnotepadHelper.SaveTedFile(filename);
+                DialogHelper.SelectMenuItem(TedpadHandle, (int)TEDnotepadHelper.MenuItems.Search, (int)TEDnotepadHelper.SearchMenuItems.Find);
+                //SendKeys.SendWait("^f");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+                var findHandle = DialogHelper.GetDialogItemHandle(TedpadHandle,0);
+               
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+                DialogHelper.SetTextboxText(findHandle, (int)TEDnotepadHelper.Findblock.Findtextbox, "searchtext2");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+                DialogHelper.ClickButton(
+                   findHandle,
+                   (int)TEDnotepadHelper.Findblock.Cancelbtn);
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
+                ////Logger.TestStep("Save file as Unicode encoding with random file name");
+                ////string filename = Path.Combine(Environment.GetFolderPath(
+                ////    Environment.SpecialFolder.Desktop),
+                ////    Path.GetRandomFileName() + ".txt");
 
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+                ////Logger.TestStep("Save TedPad as text file");
+                ////TEDnotepadHelper.SaveTedFile(filename);
 
-                Logger.TestStep("Close TedPad");
-                ProcessHelper.CloseApplication(TedpadProcess);
+                ////System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                ////Logger.TestStep("Close TedPad");
+                ////ProcessHelper.CloseApplication(TedpadProcess);
 
 
-                Logger.TestStep("Launch TedPad app");
-                TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
+                ////Logger.TestStep("Launch TedPad app");
+                ////TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
 
-                Logger.TestStep("Open test file");
-                TEDnotepadHelper.OpenFile(filename);
+                ////Logger.TestStep("Open test file");
+                ////TEDnotepadHelper.OpenFile(filename);
+               
                 
                 Logger.Comment("Close TedPad");
                 ProcessHelper.CloseApplication(TedpadProcess);  
@@ -84,6 +100,12 @@ namespace FinalProjectTeam3
                 Logger.Comment("Test Aborted");
                 Logger.Comment(error.ToString());
             }
+        }
+
+        public static void SendMessageToTextBox(IntPtr myPhonebkHandle, int textboxId, string text)
+        {
+            IntPtr textBoxHandle = DialogHelper.GetDialogItemHandle(myPhonebkHandle, textboxId);
+            NativeMethod.SendMessage(textBoxHandle, (int)0x000C, IntPtr.Zero, text);
         }
 
         private static string GetMultiLineTextForEditor()
