@@ -47,6 +47,14 @@ namespace FinalProjectTeam3
             Use2ndsearchchbx = 0x844
         }
 
+        public enum Replaceblock
+        {
+            Replacetextbox = 0x845,
+            Replacebtn = 0x85E,
+            ReplaceAllbtn = 0x85F,
+            MimicCasebtn = 0x846
+        }
+
         public enum MenuItems
         {
             File = 0,
