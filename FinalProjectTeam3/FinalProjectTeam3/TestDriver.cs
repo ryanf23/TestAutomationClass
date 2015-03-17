@@ -27,6 +27,8 @@ namespace FinalProjectTeam3
 
             // Call the test methods
             sahanaTest.UpperCaseFirstLineTestMethod();
+            sahanaTest.UpperCaseSelectWordTestMethod();
+            sahanaTest.UpperCaseSelectAllTestMethod();
             sahanaTest.LowerCaseFirstLineTestMethod();
             sahanaTest.InvertCaseFirstLineTestMethod();
 
