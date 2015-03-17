@@ -194,8 +194,7 @@ namespace FinalProjectTeam3
                 }
 
                 Logger.TestStep("Launch TedNPadd application");
-                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
-                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);                
 
                 Logger.TestStep("Open the test file");
                 TEDnotepadHelper.OpenFile(fileName);
@@ -223,6 +222,154 @@ namespace FinalProjectTeam3
                 Logger.Comment(error.ToString());
             }
            
+        }
+
+        /// <summary>
+        /// TEST OBJECTIVE: To test convert to upper scenarios of TedNPad for  selected Word
+        /// SETUP: TedNPad application, Testdata generator 
+        /// STEPS:
+        /// 1. Generate a new test file
+        /// 2. Read the test data to string array
+        /// 3. Convert selected word in file to Upper and save it to result string array
+        /// 4. Compare and log the results.
+        /// EXPECTED RESULT: selected Word in file should be all upper case
+        public void UpperCaseSelectWordTestMethod()
+        {
+            try
+            {
+                this.Initialize();
+                Logger.TestStep("Start UpperCaseSelectWordTestMethod");
+                //Test Varialbes
+                string fileName = string.Empty;
+                string[] expectedData = { };
+                string[] convertedData = { };
+
+                Logger.TestStep("Create a test file");
+                fileName = CreateTestFile(TextOption.MultiWord);
+                Logger.Comment(string.Format("Test file created with name:{0}", fileName));
+
+                Logger.TestStep("Read saved data to a string array");
+                string expectedStringData = File.ReadAllText(fileName);
+                expectedData = expectedStringData.Split(null);                
+                if (expectedData.Length > 0)
+                {
+                    expectedData[0] = expectedData[0].ToUpper();
+                }
+
+                Logger.TestStep("Launch TedNPadd application");
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Logger.Comment("TedHandle:" + TedAppHandle);
+                Logger.TestStep("Open the test file");
+                TEDnotepadHelper.OpenFile(fileName);
+
+
+                Logger.TestStep("Select word ");
+                MenuHelper.ClickMenuItem(TedAppHandle, (int)TEDnotepadHelper.MenuItems.Edit, (int)TEDnotepadHelper.EditMenuItems.SelectWord);
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                SendKeys.SendWait("^D");
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                Logger.TestStep("Pass command control+shift+U to convert to upper case");
+                SendKeys.SendWait("^+U");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+
+                Logger.TestStep("Save and exit the modified file");
+                SendKeys.SendWait("{F10}");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+
+                Logger.TestStep("Read the modified file data to a new array");
+                string convertedStrData = File.ReadAllText(fileName);
+                convertedData = convertedStrData.Split(null);
+                
+                Logger.TestStep("Compare initial and converted data and report the results");
+                ReportResult(convertedData, expectedData);
+
+                Logger.TestStep("End UpperCaseSelectWordTestMethod");
+            }
+            catch (Exception error)
+            {
+                // catch unexpected exceptions and log
+                Logger.Comment("Test Aborted");
+                Logger.Comment(error.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// TEST OBJECTIVE: To test convert to upper scenarios of TedNPad by selecting all text
+        /// SETUP: TedNPad application, Testdata generator 
+        /// STEPS:
+        /// 1. Generate a new test file
+        /// 2. Read the test data to string array
+        /// 3. select all and Convert file to Upper and save it to result string array
+        /// 4. Compare and log the results.
+        /// EXPECTED RESULT: entire file should be converted to upper case
+        public void UpperCaseSelectAllTestMethod()
+        {
+            try
+            {
+                this.Initialize();
+                Logger.TestStep("Start UpperCaseSelectAllTestMethod");
+                //Test Varialbes
+                string fileName = string.Empty;
+                string[] expectedData = { };
+                string[] convertedData = { };
+
+                Logger.TestStep("Create a test file");
+                fileName = CreateTestFile(TextOption.MultiLine);
+                Logger.Comment(string.Format("Test file created with name:{0}", fileName));
+
+                Logger.TestStep("Read saved data to a string array");                
+                expectedData = File.ReadAllLines(fileName);
+                for (int i = 0; i <= expectedData.Length - 1; i++)
+                {
+                    expectedData[i] = expectedData[i].ToUpper();
+                }
+
+                Logger.TestStep("Launch TedNPadd application");
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Logger.Comment("TedHandle:" + TedAppHandle);
+                Logger.TestStep("Open the test file");
+                TEDnotepadHelper.OpenFile(fileName);
+
+
+                Logger.TestStep("Select All word ");
+                MenuHelper.ClickMenuItem(TedAppHandle, (int)TEDnotepadHelper.MenuItems.Edit, (int)TEDnotepadHelper.EditMenuItems.SelectAll);
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                SendKeys.SendWait("^A");
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                Logger.TestStep("Pass command control+shift+U to convert to upper case");
+                SendKeys.SendWait("^+U");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+
+                Logger.TestStep("Save and exit the modified file");
+                SendKeys.SendWait("{F10}");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+
+                Logger.TestStep("Read the modified file data to a new array");
+                
+                convertedData = File.ReadAllLines(fileName);
+                if (convertedData.Length > 0)
+                {
+                    convertedData[0] = convertedData[0].ToUpper();
+                }
+                Logger.TestStep("Compare initial and converted data and report the results");
+                ReportResult(convertedData, expectedData);
+
+                Logger.TestStep("End UpperCaseSelectAllTestMethod");
+            }
+            catch (Exception error)
+            {
+                // catch unexpected exceptions and log
+                Logger.Comment("Test Aborted");
+                Logger.Comment(error.ToString());
+            }
+
         }
 
         /// <summary>
@@ -257,8 +404,7 @@ namespace FinalProjectTeam3
                 }
 
                 Logger.TestStep("Launch TedNPadd application");
-                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
-                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);                
 
                 Logger.TestStep("Open the test file");
                 TEDnotepadHelper.OpenFile(fileName);
@@ -321,8 +467,7 @@ namespace FinalProjectTeam3
                 }
 
                 Logger.TestStep("Launch TedNPadd application");
-                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
-                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);                
 
                 Logger.TestStep("Open the test file");
                 TEDnotepadHelper.OpenFile(fileName);

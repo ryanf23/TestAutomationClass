@@ -132,6 +132,23 @@ namespace FinalProjectTeam3
             FirstCapital=4
         }
 
+        public enum EditMenuItems
+        {
+            Undo = 0,
+            Redo = 1,
+            Cut = 3,
+            Copy = 4,
+            Paste = 5,
+            Swape = 6,
+            Insert = 8,
+            GoTo = 10,
+            SelectWord = 11,
+            SelectLine = 12,
+            SelectParagraph = 13,
+            SelectAll = 14
+                     
+        }
+
         /// <summary>
         /// Method to save a file by manipulating menu items via accelerator key mnemonics
         /// </summary>
