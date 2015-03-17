@@ -9,6 +9,7 @@ namespace FinalProjectTeam3
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Windows.Forms;
 
@@ -16,11 +17,12 @@ namespace FinalProjectTeam3
     using TestingMentor.TestTool.Babel;
 
     /// <summary>
-    /// Test suite for [project name] 
+    /// Test suite for Peter Sankiewicz 
     /// </summary>
     public class TestSuitePeter : TestBase
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TestSuitePeter"/> class. 
         /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]
         /// SETUP: [Information regarding machine state, test data, tools, etc for test to run.] 
         /// STEPS:
@@ -28,6 +30,7 @@ namespace FinalProjectTeam3
         /// 2. [Step 2, etc.]
         /// EXPECTED RESULT: [Expected outcome of test]
         /// </summary>
+
         public TestSuitePeter()
         {
             try
@@ -35,29 +38,26 @@ namespace FinalProjectTeam3
                 this.Initialize();
 
                 // Lanch TED Notepad application
-                Process tedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
+                IntPtr tedAppHandle;
+                var tedApp = StartTedAppProcess(out tedAppHandle);
 
-                // Get the Application Handle
-                IntPtr tedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                // Get test Paragraphs into the Editor
+                string testParagraph;
+                Get_testParagraph(tedAppHandle, out testParagraph);
 
                 // Save the file
-                MenuHelper.ClickMenuItem(tedAppHandle, (int)TEDnotepadHelper.MenuItems.File, (int)TEDnotepadHelper.FileMenuItems.SaveAs);
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                SaveFile(tedAppHandle);
 
-                IntPtr saveAsDialog = DialogHelper.GetDialogHandle(tedAppHandle);
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                // 1. Edit-->Select word
 
-                // get random file name and assign it to saveFilename
-                string randomfile = Path.GetRandomFileName();
-                string saveFileName = randomfile;
-                Logger.Comment(string.Format("File name = {0}", saveFileName));
 
-                SendKeys.SendWait(saveFileName);
-                DialogHelper.ClickButton(saveAsDialog, (int)TEDnotepadHelper.SaveAsDialog.Savebtn);
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                // 2. Edit-->Delete LIne
+
+                // 3. Edit-->Insert-->Recently Deleted
+
 
                 // Close the application
-                ProcessHelper.CloseApplication(tedApp);
+                // ProcessHelper.CloseApplication(tedApp);
 
                 this.Cleanup();
             }
@@ -68,5 +68,113 @@ namespace FinalProjectTeam3
                 Logger.Comment(error.ToString());
             }
         }
+
+        /// <summary>
+        /// The get_test paragraph method.
+        /// </summary>
+        /// <param name="tedAppHandle">
+        /// The ted app handle.
+        /// </param>
+        /// <param name="testParagraph">
+        /// The test paragraph.
+        /// </param>
+        private static void Get_testParagraph(IntPtr tedAppHandle, out string testParagraph)
+        {
+            Logger.TestStep("Get test Paragraphs for the Editor");
+            testParagraph = GetTextForEditor(TextOption.Short);
+
+            Logger.TestStep("Write the Text into editor");
+            DialogHelper.SetTextboxText(tedAppHandle, (int)TEDnotepadHelper.TedApplication.MainTextEntryField, testParagraph);
+        }
+
+        /// <summary>
+        /// The start_ted app_process method.
+        /// </summary>
+        /// <param name="tedAppHandle">
+        /// The ted app handle.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Process"/> tedApp .
+        /// </returns>
+        private static Process StartTedAppProcess(out IntPtr tedAppHandle)
+        {
+            Logger.TestStep("Lanch TED Notepad application"); 
+            Process tedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
+
+            Logger.TestStep("Get the Application Handle");
+            tedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+            return tedApp;
+        }
+
+        /// <summary>
+        /// The save file method.
+        /// </summary>
+        /// <param name="tedAppHandle">
+        /// The ted app handle.
+        /// </param>
+        private static void SaveFile(IntPtr tedAppHandle)
+        {
+            // Save the file
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.File,
+                (int)TEDnotepadHelper.FileMenuItems.SaveAs);
+
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            IntPtr saveAsDialog = DialogHelper.GetDialogHandle(tedAppHandle);
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            // get random file name and assign it to saveFilename
+            string saveFileName = Path.GetRandomFileName();
+            
+            Logger.Comment(string.Format("File name = {0}", saveFileName));
+            SendKeys.SendWait(saveFileName);
+            DialogHelper.ClickButton(saveAsDialog, (int)TEDnotepadHelper.SaveAsDialog.Savebtn);
+
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+
+        /// <summary>
+        /// Get paragraph text to save to the TED note pad file
+        /// </summary>
+        /// <param name="option">
+        /// short | long
+        /// </param>
+        /// <returns>
+        /// Random Text
+        /// </returns>
+        private static string GetTextForEditor(TextOption option)
+        {
+            // get seedValue
+            // int seedValue;
+            string returnText = string.Empty;
+
+            // if option long, returns long paragraph, if options short, returns short paragraph
+            if (option == TextOption.Long)
+            {
+                string[] words = { "anemone", "wagstaff", "man", "the", "for", "and", "a", "with", "bird", "fox" };
+                RandomText text = new RandomText(words);
+                text.AddContentParagraphs(5, 8, 12, 50, 100);
+                returnText = text.Content;
+            }
+            else if (option == TextOption.Short)
+            {
+                string[] words = { "anemone", "wagstaff", "man", "the", "for", "and", "a", "with", "bird", "fox" };
+                RandomText text = new RandomText(words);
+                text.AddContentParagraphs(2, 1, 1, 2, 4);
+                returnText = text.Content;
+            }
+            return returnText;
+        }
+    }
+
+    /// <summary>
+    /// The text option.
+    /// </summary>
+    public enum TextOption
+    {
+        Short = 1,
+        Long = 2
     }
 }
