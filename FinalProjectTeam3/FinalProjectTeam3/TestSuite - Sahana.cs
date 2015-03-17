@@ -157,10 +157,8 @@ namespace FinalProjectTeam3
         /// 1. Generate a new test file
         /// 2. Read the test data to string array
         /// 3. Convert first line of file to Upper and save it to result string array
-        /// 4. Move to next line, select partial text and convert to upper
-        /// 4. Convert all text to Upper and save it to result string array
-        /// 5. Compare the log the results.
-        /// EXPECTED RESULT: [Expected outcome of test]
+        /// 4. Compare the log the results.
+        /// EXPECTED RESULT: first line in file should be all upper case
         public void UpperCaseFirstLineTestMethod()
         {
             try
@@ -215,81 +213,59 @@ namespace FinalProjectTeam3
            
         }
 
-
         /// <summary>
-        /// TEST OBJECTIVE: [Brief statement explaining purpose of test.]
-        /// SETUP: [Information regarding machine state, test data, tools, etc for test to run.] 
+        /// TEST OBJECTIVE: To test convert to lower scenarios of TedNPad
+        /// SETUP: TedNPad application, Testdata generator 
         /// STEPS:
-        /// 1. [Step 1]
-        /// 2. [Step 2, etc.]
-        /// EXPECTED RESULT: [Expected outcome of test]
-        /// </summary>
-        public void TestMethod()
-        {            
+        /// 1. Generate a new test file
+        /// 2. Read the test data to string array
+        /// 3. Convert first line of file to Lower and save it to result string array
+        /// 4. Compare the log the results.
+        /// EXPECTED RESULT: first line in file should be all lower case
+        public void LowerCaseFirstLineTestMethod()
+        {
             try
             {
                 this.Initialize();
-                //Create a test file and save it to the test directory
+                Logger.TestStep("Start LowerCaseFirstLineTestMethod");
+                //Test Varialbes
+                string fileName = string.Empty;
+                string[] expectedData = { };
+                string[] convertedData = { };
 
-                string TedpadApplication = testPath + tedNPadApp;
-                Logger.TestStep("Launch TedPad");
-                Process TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
+                Logger.TestStep("Create a test file");
+                fileName = CreateTestFile();
+                Logger.Comment(string.Format("Test file created with name:{0}", fileName));
 
-                Logger.Comment("Get multiine text");
-                //Get string for editor
-                string text = GetMultiLineTextForEditor();
+                Logger.TestStep("Read saved data to a string array");
+                expectedData = File.ReadAllLines(fileName);
+                if (expectedData.Length > 0)
+                {
+                    expectedData[0] = expectedData[0].ToLower();
+                }
 
-                Logger.TestStep("Send text to TedPad edit control");
-                SendKeys.SendWait(text);
+                Logger.TestStep("Launch TedNPadd application");
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
 
-                // SendKeys is slow...so we need to sleep to allow text to get entered into edit window
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+                Logger.TestStep("Open the test file");
+                TEDnotepadHelper.OpenFile(fileName);
 
-                Logger.Comment("Get Tednotepad window handle.");
-                IntPtr TedpadHandle = ProcessHelper.GetMainForegroundWindowHandle();
+                Logger.TestStep("Pass command control+shift+L to convert to lower case");
+                SendKeys.SendWait("^+L");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2500));
 
-                DialogHelper.SelectMenuItem(TedpadHandle, (int)TEDnotepadHelper.MenuItems.Search, (int)TEDnotepadHelper.SearchMenuItems.Find);
-                //SendKeys.SendWait("^f");
-                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
-                var findHandle = DialogHelper.GetDialogItemHandle(TedpadHandle,0);
-               
-                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
-                DialogHelper.SetTextboxText(findHandle, (int)TEDnotepadHelper.Findblock.Findtextbox, "searchtext2");
-                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
-                DialogHelper.ClickButton(
-                   findHandle,
-                   (int)TEDnotepadHelper.Findblock.Cancelbtn);
-                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
-                ////Logger.TestStep("Save file as Unicode encoding with random file name");
-                ////string filename = Path.Combine(Environment.GetFolderPath(
-                ////    Environment.SpecialFolder.Desktop),
-                ////    Path.GetRandomFileName() + ".txt");
+                Logger.TestStep("Save and exit the modified file");
+                SendKeys.SendWait("{F10}");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(5000));
 
-                ////Logger.TestStep("Save TedPad as text file");
-                ////TEDnotepadHelper.SaveTedFile(filename);
+                Logger.TestStep("Read the modified file data to a new array");
+                convertedData = File.ReadAllLines(fileName);
 
-                ////System.Threading.Thread.Sleep(TimeSpan.FromSeconds(2));
+                Logger.TestStep("Compare initial and converted data and report the results");
+                ReportResult(convertedData, expectedData);
 
-                ////Logger.TestStep("Close TedPad");
-                ////ProcessHelper.CloseApplication(TedpadProcess);
-
-
-                ////Logger.TestStep("Launch TedPad app");
-                ////TedpadProcess = ProcessHelper.LaunchApplication(TedpadApplication);
-
-                ////Logger.TestStep("Open test file");
-                ////TEDnotepadHelper.OpenFile(filename);
-               
-                
-                Logger.Comment("Close TedPad");
-                ProcessHelper.CloseApplication(TedpadProcess);  
-                //Test case operation
-                ////Logger.TestStep("commad to convert to upper");
-                ////SendKeys.SendWait("^+U");                
-
-                ////Console.WriteLine(string.Format("Generated string Value: {0}", text));               
-                ////Console.ReadLine();
-                this.Cleanup();
+                Logger.TestStep("End LowerCaseFirstLineTestMethod");
             }
             catch (Exception error)
             {
@@ -297,13 +273,10 @@ namespace FinalProjectTeam3
                 Logger.Comment("Test Aborted");
                 Logger.Comment(error.ToString());
             }
+
         }
 
-        public static void SendMessageToTextBox(IntPtr myPhonebkHandle, int textboxId, string text)
-        {
-            IntPtr textBoxHandle = DialogHelper.GetDialogItemHandle(myPhonebkHandle, textboxId);
-            NativeMethod.SendMessage(textBoxHandle, (int)0x000C, IntPtr.Zero, text);
-        }
+     
 
         
 
