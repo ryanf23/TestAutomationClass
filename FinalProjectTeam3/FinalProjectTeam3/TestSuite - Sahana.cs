@@ -18,6 +18,11 @@ namespace FinalProjectTeam3
     /// </summary>
     public class TestSuiteSahana : TestBase
     {
+        public enum TextOption
+        {
+            MultiLine = 1,
+            MultiWord = 2            
+        }
 
         private readonly string testPath;
         private readonly string tedNPadApp;
@@ -34,13 +39,21 @@ namespace FinalProjectTeam3
         /// Get Multiline text to save to the TedPadFile
         /// </summary>
         /// <returns></returns>
-        private static string GetMultiLineTextForEditor()
+        private static string GetTextForEditor(TextOption option)
         {
             int seedValue;
-            string firstLine = GetTextString(15, out seedValue) + "\n";
-            string secondLine = GetTextString(20, out seedValue) + "\n";
+            string firstLine = GetTextString(15, out seedValue);
+            string secondLine = GetTextString(20, out seedValue);
             string thirdLine = GetTextString(50, out seedValue);
-            string FinalText = string.Concat(firstLine, secondLine, thirdLine);
+            string FinalText = string.Empty;
+            if (option == TextOption.MultiLine)
+            {
+                FinalText = string.Concat(firstLine, "\n", secondLine, "\n", thirdLine);
+            }
+            else if(option == TextOption.MultiWord)
+            {
+                FinalText = string.Concat(firstLine, " ", secondLine, " ", thirdLine);
+            }            
             return FinalText;
         }
 
@@ -95,14 +108,14 @@ namespace FinalProjectTeam3
         /// Create a test file and return test file name
         /// </summary>
         /// <returns></returns>
-        public string CreateTestFile()
+        public string CreateTestFile(TextOption option)
         {
             String TedApp = testPath + tedNPadApp;
             Logger.TestStep("Lauch TedApp ");
             Process TedProcess = ProcessHelper.LaunchApplication(TedApp);
 
             Logger.TestStep("Getting the Text for the Editor");
-            string Text = GetMultiLineTextForEditor();
+            string Text = GetTextForEditor(option);
 
             Logger.TestStep("Write the Text into editor");
             SendKeys.SendWait(Text);
@@ -170,7 +183,7 @@ namespace FinalProjectTeam3
                 string[] convertedData = { };
 
                 Logger.TestStep("Create a test file");
-                fileName = CreateTestFile();
+                fileName = CreateTestFile(TextOption.MultiLine);
                 Logger.Comment(string.Format("Test file created with name:{0}", fileName));
 
                 Logger.TestStep("Read saved data to a string array");
@@ -233,7 +246,7 @@ namespace FinalProjectTeam3
                 string[] convertedData = { };
 
                 Logger.TestStep("Create a test file");
-                fileName = CreateTestFile();
+                fileName = CreateTestFile(TextOption.MultiLine);
                 Logger.Comment(string.Format("Test file created with name:{0}", fileName));
 
                 Logger.TestStep("Read saved data to a string array");
@@ -296,7 +309,7 @@ namespace FinalProjectTeam3
                 string[] convertedData = { };
 
                 Logger.TestStep("Create a test file");
-                fileName = CreateTestFile();
+                fileName = CreateTestFile(TextOption.MultiLine);
                 Logger.Comment(string.Format("Test file created with name:{0}", fileName));
 
                 Logger.TestStep("Read saved data to a string array");
@@ -337,33 +350,7 @@ namespace FinalProjectTeam3
                 Logger.Comment(error.ToString());
             }
 
-        }
-
-     
-
-        
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
+        }        
 
         /// <summary>
         /// A method to get all the text from a Ted edit note pad
