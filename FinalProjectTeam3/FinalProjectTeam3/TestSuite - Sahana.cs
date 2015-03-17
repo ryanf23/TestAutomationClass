@@ -12,6 +12,7 @@ namespace FinalProjectTeam3
     using TestingMentor.TestAutomationFramework;
     using TestingMentor.TestTool.Babel;
     using System.Configuration;
+    using System.Linq;
     /// <summary>
     /// Test suite for [project name] 
     /// </summary>
@@ -35,13 +36,11 @@ namespace FinalProjectTeam3
         /// <returns></returns>
         private static string GetMultiLineTextForEditor()
         {
-            int seedValue1;
-            int seedValue2;
-            int seedValue3;
-            string firstLine = GetTextString(15, out seedValue1);
-            string secondLine = GetTextString(20, out seedValue2);
-            string thirdLine = GetTextString(50, out seedValue3);
-            string FinalText = string.Concat(firstLine, System.Environment.NewLine, secondLine, System.Environment.NewLine, thirdLine);
+            int seedValue;
+            string firstLine = GetTextString(15, out seedValue) + "\n";
+            string secondLine = GetTextString(20, out seedValue) + "\n";
+            string thirdLine = GetTextString(50, out seedValue);
+            string FinalText = string.Concat(firstLine, secondLine, thirdLine);
             return FinalText;
         }
 
@@ -96,7 +95,7 @@ namespace FinalProjectTeam3
         /// Create a test file and return test file name
         /// </summary>
         /// <returns></returns>
-        private string CreateTestFile()
+        public string CreateTestFile()
         {
             String TedApp = testPath + tedNPadApp;
             Logger.TestStep("Lauch TedApp ");
@@ -253,6 +252,70 @@ namespace FinalProjectTeam3
 
                 Logger.TestStep("Pass command control+shift+L to convert to lower case");
                 SendKeys.SendWait("^+L");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+
+                Logger.TestStep("Save and exit the modified file");
+                SendKeys.SendWait("{F10}");
+                System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+
+                Logger.TestStep("Read the modified file data to a new array");
+                convertedData = File.ReadAllLines(fileName);
+
+                Logger.TestStep("Compare initial and converted data and report the results");
+                ReportResult(convertedData, expectedData);
+
+                Logger.TestStep("End LowerCaseFirstLineTestMethod");
+            }
+            catch (Exception error)
+            {
+                // catch unexpected exceptions and log
+                Logger.Comment("Test Aborted");
+                Logger.Comment(error.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// TEST OBJECTIVE: To test Inversion case of TedNPad
+        /// SETUP: TedNPad application, Testdata generator 
+        /// STEPS:
+        /// 1. Generate a new test file
+        /// 2. Read the test data to string array
+        /// 3. Invert case of first line and save it to result string array
+        /// 4. Compare the log the results.
+        /// EXPECTED RESULT: first line case should be inverted
+        public void InvertCaseFirstLineTestMethod()
+        {
+            try
+            {
+                this.Initialize();
+                Logger.TestStep("Start InvertCaseFirstLineTestMethod");
+                //Test Varialbes
+                string fileName = string.Empty;
+                string[] expectedData = { };
+                string[] convertedData = { };
+
+                Logger.TestStep("Create a test file");
+                fileName = CreateTestFile();
+                Logger.Comment(string.Format("Test file created with name:{0}", fileName));
+
+                Logger.TestStep("Read saved data to a string array");
+                expectedData = File.ReadAllLines(fileName);
+                if (expectedData.Length > 0)
+                {
+                    expectedData[0] = new string(expectedData[0].Select(c => char.IsLetter(c) ? (char.IsUpper(c) ?
+                                          char.ToLower(c) : char.ToUpper(c)) : c).ToArray());
+                }
+
+                Logger.TestStep("Launch TedNPadd application");
+                Process TedAppProcess = ProcessHelper.LaunchApplication(testPath + tedNPadApp);
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
+
+                Logger.TestStep("Open the test file");
+                TEDnotepadHelper.OpenFile(fileName);
+
+                Logger.TestStep("Pass command control+shift+I to convert to Invert case");
+                SendKeys.SendWait("^+I");
                 System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(2500));
 
                 Logger.TestStep("Save and exit the modified file");

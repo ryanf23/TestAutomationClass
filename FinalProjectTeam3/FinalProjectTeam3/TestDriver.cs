@@ -27,6 +27,7 @@ namespace FinalProjectTeam3
             // Call the test methods
             sahanaTest.UpperCaseFirstLineTestMethod();
             sahanaTest.LowerCaseFirstLineTestMethod();
+            sahanaTest.InvertCaseFirstLineTestMethod();
             timer.Stop();
             TimeSpan ts = timer.Elapsed;
 
