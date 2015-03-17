@@ -7,10 +7,10 @@ C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalPr
 C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.exe
 C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.pdb
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.exe.config
-C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.exe
-C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.pdb
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.exe
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.pdb
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\Babel.dll
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\TestAutomationFramework.dll
 C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.csprojResolveAssemblyReference.cache
+C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.exe
+C:\Users\test\Documents\Visual Studio 2013\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.pdb
