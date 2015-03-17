@@ -1,1 +1,8 @@
 C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.exe.config
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.exe
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\FinalProjectTeam3.pdb
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\Babel.dll
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\bin\Debug\TestAutomationFramework.dll
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.csprojResolveAssemblyReference.cache
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.exe
+C:\Users\Family\Documents\GitHub\TestAutomationClass\TestAutomationClass\FinalProjectTeam3\FinalProjectTeam3\obj\x86\Debug\FinalProjectTeam3.pdb

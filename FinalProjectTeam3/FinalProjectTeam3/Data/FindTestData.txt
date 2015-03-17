@@ -1,0 +1,1 @@
+﻿The word to search for is "test" there are 4 lowercase 4 uppercase and four mixed case intest test TEST Test test TEST inTEST outTest TEST Test and last one Test,TedFindTest,test,Water 

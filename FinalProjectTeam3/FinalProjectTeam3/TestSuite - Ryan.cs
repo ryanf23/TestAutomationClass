@@ -36,13 +36,13 @@ namespace FinalProjectTeam3
                 Process TedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
 
                 //Get the Application Handle
-                IntPtr TedAppHandle = ProcessHelper.GetApplicationWindowHandle();
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
 
                 //initialize variables that will be used to complete the test
                 string EnteredDataInfo = string.Empty;
                 string SavedFileData = string.Empty;
                 string saveFileName = string.Empty;
-                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(Helper.GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadSaveTestData + TedEnvironmentInfo.FileType));
+                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadSaveTestData + TedEnvironmentInfo.FileType));
 
                 //Loop through the test data provided - Currently only 1 line of data
                 foreach (string s in testData)
@@ -98,7 +98,7 @@ namespace FinalProjectTeam3
                 Process TedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
 
                 //Get the Application Handle
-                IntPtr TedAppHandle = ProcessHelper.GetApplicationWindowHandle();
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
 
                 //initialize variables that will be used to complete the test
                 string EnteredDataInfo = string.Empty;
@@ -106,7 +106,7 @@ namespace FinalProjectTeam3
                 string saveFileName = string.Empty;
                 string positiveSearchWord = string.Empty;
                 string negativeSearchword = string.Empty;
-                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(Helper.GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadFindTestData + TedEnvironmentInfo.FileType));
+                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadFindTestData + TedEnvironmentInfo.FileType));
 
                 //Loop through the test data provided - Currently only 1 line of data
                 foreach (string s in testData)
@@ -147,7 +147,7 @@ namespace FinalProjectTeam3
 
                     //Enter Positive search
                     DialogHelper.SetTextboxText(findHandle, (int)TEDnotepadHelper.Findblock.Findtextbox, positiveSearchWord);
-                    DialogHelper.SetCheckboxState(findHandle, (int)TEDnotepadHelper.Findblock.Wraparoundchbx, true);
+                    DialogHelper.SetCheckboxState(DialogHelper.GetDialogItemHandle(findHandle,(int)TEDnotepadHelper.Findblock.Wraparoundchbx), true);
                     System.Threading.Thread.Sleep(TimeSpan.FromMilliseconds(250));
                     DialogHelper.ClickButton(findHandle, (int)TEDnotepadHelper.Findblock.Nextbtn);
 
@@ -198,7 +198,7 @@ namespace FinalProjectTeam3
                 Process TedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
 
                 //Get the Application Handle
-                IntPtr TedAppHandle = ProcessHelper.GetApplicationWindowHandle();
+                IntPtr TedAppHandle = ProcessHelper.GetMainForegroundWindowHandle();
 
                 //initialize variables that will be used to complete the test
                 string EnteredDataInfo = string.Empty;
@@ -206,7 +206,7 @@ namespace FinalProjectTeam3
                 string saveFileName = string.Empty;
                 string findWord = string.Empty;
                 string replaceWord = string.Empty;
-                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(Helper.GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadReplaceData + TedEnvironmentInfo.FileType));
+                string[] testData = TestDataReader.GetAllTestDataFromTextFile(Path.Combine(GetWorkingDirectory(), TedEnvironmentInfo.DataFolder, TedEnvironmentInfo.TednPadReplaceData + TedEnvironmentInfo.FileType));
 
                 //Loop through the test data provided
                 foreach (string s in testData)
@@ -324,6 +324,23 @@ namespace FinalProjectTeam3
             }
             return result;
         }
+        private string GetWorkingDirectory()
+        {
+            string releaseDirectory = "release";
+            //Set the working directory to the project directory
+            string workingDirectory = Environment.CurrentDirectory;
+            int pathLength = workingDirectory.Length;
+
+            if (workingDirectory.EndsWith(releaseDirectory, StringComparison.InvariantCultureIgnoreCase))
+            {
+                workingDirectory = workingDirectory.Remove(pathLength - releaseDirectory.Length);
+            }
+            else
+            {
+                workingDirectory = workingDirectory.Remove(pathLength - releaseDirectory.Length - 2);
+            }
+            return workingDirectory;
+        }
     }
     public class TedEnvironmentInfo
     {
@@ -340,11 +357,6 @@ namespace FinalProjectTeam3
         public static string TednPadReplaceData = "ReplaceTestData";
 
         public static string DataFolder = "Data";
-
-        public static string FindStringPositive = "test";
-
-        public static string FindStringNegative = "bullet";
-
     }
 
 }

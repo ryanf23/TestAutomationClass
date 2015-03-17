@@ -1,0 +1,1 @@
+﻿This will test all characters on the keyboard accept for comma because I am going to use that as a delimiter `1234567890-=~!@#$%^&*()_+	qwertyuiop[]\QWERTYUIOP{}|asdfghjkl;'ASDFGHJKL:"zxcvbnm./ZXCVBNM<>?
