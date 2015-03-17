@@ -5,6 +5,7 @@
 namespace FinalProjectTeam3
 {
     using System;
+    using System.Data;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
@@ -37,27 +38,14 @@ namespace FinalProjectTeam3
             {
                 this.Initialize();
 
-                // Lanch TED Notepad application
-                IntPtr tedAppHandle;
-                var tedApp = StartTedAppProcess(out tedAppHandle);
+                Logger.Comment("start the Select Cut Word Test");
+                SelectCutWordTestMethod();
 
-                // Get test Paragraphs into the Editor
-                string testParagraph;
-                Get_testParagraph(tedAppHandle, out testParagraph);
+                Logger.Comment("start the Delete Line Test");
+                DeleteLineTestMethod();
 
-                // Save the file
-                SaveFile(tedAppHandle);
-
-                // 1. Edit-->Select word
-
-
-                // 2. Edit-->Delete LIne
-
-                // 3. Edit-->Insert-->Recently Deleted
-
-
-                // Close the application
-                // ProcessHelper.CloseApplication(tedApp);
+                Logger.Comment("start the Insert Recently Deleted Test");
+                InsertRecentlyDeletedTestMethod();
 
                 this.Cleanup();
             }
@@ -70,21 +58,138 @@ namespace FinalProjectTeam3
         }
 
         /// <summary>
-        /// The get_test paragraph method.
+        /// The select cut word test method.
         /// </summary>
-        /// <param name="tedAppHandle">
-        /// The ted app handle.
-        /// </param>
-        /// <param name="testParagraph">
-        /// The test paragraph.
-        /// </param>
-        private static void Get_testParagraph(IntPtr tedAppHandle, out string testParagraph)
+        private static void SelectCutWordTestMethod()
         {
-            Logger.TestStep("Get test Paragraphs for the Editor");
-            testParagraph = GetTextForEditor(TextOption.Short);
+            Logger.Comment("starting test case 1");
+            IntPtr tedAppHandle;
+            var tedApp = StartTedAppProcess(out tedAppHandle);
 
-            Logger.TestStep("Write the Text into editor");
-            DialogHelper.SetTextboxText(tedAppHandle, (int)TEDnotepadHelper.TedApplication.MainTextEntryField, testParagraph);
+            Logger.Comment("get test paragraph");
+            string testParagraph = GetTextForEditor(TextOption.Short);
+
+            Logger.Comment("paste test paragraph");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            DialogHelper.SetTextboxText(
+                tedAppHandle,
+                (int)TEDnotepadHelper.TedApplication.MainTextEntryField,
+                testParagraph);
+
+            Logger.Comment("save file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("select Word");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.Edit,
+                (int)TEDnotepadHelper.EditMenuItems.SelectWord);
+
+            Logger.Comment("cut word");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.Edit,
+                (int)TEDnotepadHelper.EditMenuItems.Cut);
+
+            Logger.Comment("save new file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("Close the application");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            ProcessHelper.CloseApplication(tedApp);
+        }
+
+        /// <summary>
+        /// The delete line test method.
+        /// </summary>
+        private static void DeleteLineTestMethod()
+        {
+            Logger.Comment("starting test case 2");
+            IntPtr tedAppHandle;
+            var tedApp = StartTedAppProcess(out tedAppHandle);
+
+            Logger.Comment("get test paragraph");
+            string testParagraph = GetTextForEditor(TextOption.Short);
+
+            Logger.Comment("paste test paragraph");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            DialogHelper.SetTextboxText(
+                tedAppHandle,
+                (int)TEDnotepadHelper.TedApplication.MainTextEntryField,
+                testParagraph);
+
+            Logger.Comment("save file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("delete line");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.Edit,
+                (int)TEDnotepadHelper.EditMenuItems.DeleteLine);
+
+            Logger.Comment("save new file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("Close the application");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            ProcessHelper.CloseApplication(tedApp);
+        }
+
+        /// <summary>
+        /// The insert recently deleted test method.
+        /// </summary>
+        private static void InsertRecentlyDeletedTestMethod()
+        {
+            Logger.Comment("starting test case 3");
+            IntPtr tedAppHandle;
+            var tedApp = StartTedAppProcess(out tedAppHandle);
+
+            Logger.Comment("get test paragraph");
+            string testParagraph = GetTextForEditor(TextOption.Short);
+
+            Logger.Comment("paste test paragraph");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            DialogHelper.SetTextboxText(
+                tedAppHandle,
+                (int)TEDnotepadHelper.TedApplication.MainTextEntryField,
+                testParagraph);
+
+            Logger.Comment("save file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("select Line");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.Edit,
+                (int)TEDnotepadHelper.EditMenuItems.SelectAll);
+
+            Logger.Comment("delete all");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            MenuHelper.ClickMenuItem(
+                tedAppHandle,
+                (int)TEDnotepadHelper.MenuItems.Edit,
+                (int)TEDnotepadHelper.EditMenuItems.Cut);
+
+            Logger.Comment("insert recently deleted");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SendKeys.SendWait("^Q");
+
+            Logger.Comment("save new file");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            SaveFile(tedAppHandle);
+
+            Logger.Comment("Close the application");
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+            ProcessHelper.CloseApplication(tedApp);
         }
 
         /// <summary>
@@ -98,7 +203,7 @@ namespace FinalProjectTeam3
         /// </returns>
         private static Process StartTedAppProcess(out IntPtr tedAppHandle)
         {
-            Logger.TestStep("Lanch TED Notepad application"); 
+            Logger.TestStep("Lanch TED Notepad application");
             Process tedApp = ProcessHelper.LaunchApplication(TedEnvironmentInfo.TedApplicationExe);
 
             Logger.TestStep("Get the Application Handle");
@@ -136,7 +241,7 @@ namespace FinalProjectTeam3
         }
 
         /// <summary>
-        /// Get paragraph text to save to the TED note pad file
+        /// Get paragraph text to paste into the TED note pad file
         /// </summary>
         /// <param name="option">
         /// short | long
@@ -153,9 +258,14 @@ namespace FinalProjectTeam3
             // if option long, returns long paragraph, if options short, returns short paragraph
             if (option == TextOption.Long)
             {
-                string[] words = { "anemone", "wagstaff", "man", "the", "for", "and", "a", "with", "bird", "fox" };
+                string[] words =
+                    {
+                        "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "sed",
+                        "diam", "nonummy", "nibh", "euismod", "tincidunt", "ut", "laoreet", "dolore", "magna",
+                        "aliquam", "erat"
+                    };
                 RandomText text = new RandomText(words);
-                text.AddContentParagraphs(5, 8, 12, 50, 100);
+                text.AddContentParagraphs(2, 2, 3, 5, 10);
                 returnText = text.Content;
             }
             else if (option == TextOption.Short)
@@ -174,7 +284,10 @@ namespace FinalProjectTeam3
     /// </summary>
     public enum TextOption
     {
-        Short = 1,
-        Long = 2
+        /// <summary>
+        /// The short.
+        /// </summary>
+        Short,
+        Long
     }
 }

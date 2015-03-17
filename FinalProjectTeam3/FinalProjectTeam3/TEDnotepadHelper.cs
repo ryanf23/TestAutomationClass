@@ -145,8 +145,8 @@ namespace FinalProjectTeam3
             SelectWord = 11,
             SelectLine = 12,
             SelectParagraph = 13,
-            SelectAll = 14
-                     
+            SelectAll = 14,
+            DeleteLine = 16     
         }
 
         /// <summary>
