@@ -68,7 +68,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.ASCII);
+            string testParagraph = GetTextForEditor(TextOption.UniCode);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -101,7 +101,10 @@ namespace FinalProjectTeam3
 
             Logger.Comment("save new file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
-            SaveFile(tedAppHandle);
+
+            string saveFileName = string.Empty;
+
+            SaveFile(saveFileName, tedAppHandle);
 
             // TODO: Get File name
 
@@ -110,6 +113,18 @@ namespace FinalProjectTeam3
             ProcessHelper.CloseApplication(tedApp);
 
             //TODO: ORACLE to see if the first word is cut
+            //Oracle if the file contains the positive search word then the test passes
+            
+            string SavedFileData = string.Empty;
+            SavedFileData = GetDatafromFile(SavedFileData, TedEnvironmentInfo.SaveLocation.ToString() + saveFileName, TedEnvironmentInfo.FileType);
+            if (SavedFileData.Contains(positiveSearchWord))
+            {
+                Logger.Comment("Test Passed");
+            }
+            else
+            {
+                Logger.Comment("Test Failed");
+            }
         }
 
         /// <summary>
@@ -122,7 +137,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.UniCode);
+            string testParagraph = GetTextForEditor(TextOption.Medium);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -180,9 +195,10 @@ namespace FinalProjectTeam3
 
             Logger.Comment("save file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
-            SaveFile(tedAppHandle);
+            SaveFile(tedAppHandle, out fileName);
 
             // TODO: Get File name
+
 
             // TODO: Copy all text into a string
 
@@ -242,7 +258,7 @@ namespace FinalProjectTeam3
         /// <param name="tedAppHandle">
         /// The ted app handle.
         /// </param>
-        private static void SaveFile(IntPtr tedAppHandle)
+        private static void SaveFile(out string saveFileName, IntPtr tedAppHandle)
         {
             // TODO: modify to return filename as string
             
@@ -258,7 +274,7 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // get random file name and assign it to saveFilename
-            string saveFileName = Path.GetRandomFileName();
+            saveFileName = Path.GetRandomFileName();
             
             Logger.Comment(string.Format("File name = {0}", saveFileName));
             SendKeys.SendWait(saveFileName);
@@ -297,7 +313,6 @@ namespace FinalProjectTeam3
                 text.AddContentParagraphs(3, 3, 4, 5, 10);
                 returnText = text.Content;
             }
-            
             else if (option == TextOption.ASCII)
             {
                 string[] words = 
@@ -335,8 +350,34 @@ namespace FinalProjectTeam3
             sg.Info.AllowNumberCharacters = true;
             return sg.Polyglot();
         }
-    }
+        private static string GetDatafromFile(string saveFileName, out string savedFileData)
+        {
+            byte[] buffer;
+            FileStream fs = new FileStream(saveFileName, FileMode.Open, FileAccess.Read);
 
+            try
+            {
+                int length = (int)fs.Length;
+                buffer = new byte[length];
+                int count;
+                int sum = 0;
+
+
+                while ((count = fs.Read(buffer, sum, length - sum)) > 0)
+                {
+                    savedFileData = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+                    Logger.Comment(savedFileData);
+                    sum += count;
+                }
+            }
+            finally
+            {
+
+                fs.Close();
+            }
+        }
+    }
+    
     /// <summary>
     /// The text option.
     /// </summary>
