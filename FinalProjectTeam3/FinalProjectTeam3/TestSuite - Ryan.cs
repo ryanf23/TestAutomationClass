@@ -344,11 +344,11 @@ namespace FinalProjectTeam3
     }
     public class TedEnvironmentInfo
     {
-        public static string TedApplicationExe = @"C:\Users\bell100x001\Desktop\TedNPad.exe";
+        public static string TedApplicationExe = @"C:\Users\Family\Desktop\TedNPad.exe";
 
         public static string FileType = ".txt";
 
-        public static string SaveLocation = @"C:\Users\bell100x001\Documents\";
+        public static string SaveLocation = @"C:\Users\Family\Documents\";
 
         public static string TednPadSaveTestData = "SaveTestData";
 
