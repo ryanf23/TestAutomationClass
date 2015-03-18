@@ -5,7 +5,6 @@
 namespace FinalProjectTeam3
 {
     using System;
-    using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -68,7 +67,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.ASCII);
+            string testParagraph = GetTextForEditor(TextOption.Short);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -80,8 +79,6 @@ namespace FinalProjectTeam3
             Logger.Comment("save file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
-
-            // TODO: Get File name
 
             Logger.Comment("select Word");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -97,19 +94,13 @@ namespace FinalProjectTeam3
                 (int)TEDnotepadHelper.MenuItems.Edit,
                 (int)TEDnotepadHelper.EditMenuItems.Cut);
 
-            //TODO: retrieve the cut word into a string
-
             Logger.Comment("save new file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
-            // TODO: Get File name
-
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
-
-            //TODO: ORACLE to see if the first word is cut
         }
 
         /// <summary>
@@ -122,7 +113,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.UniCode);
+            string testParagraph = GetTextForEditor(TextOption.Short);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -134,10 +125,6 @@ namespace FinalProjectTeam3
             Logger.Comment("save file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
-
-            // TODO: Get File name
-
-            // TODO: Get first line into a string
 
             Logger.Comment("delete line");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -150,13 +137,9 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
-            // TODO: Get File name
-
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
-
-            // TODO: ORACLE to compare files to see if string is in the new file
         }
 
         /// <summary>
@@ -169,7 +152,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.UniCode);
+            string testParagraph = GetTextForEditor(TextOption.Short);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -182,11 +165,7 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
-            // TODO: Get File name
-
-            // TODO: Copy all text into a string
-
-            Logger.Comment("select All");
+            Logger.Comment("select Line");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             MenuHelper.ClickMenuItem(
                 tedAppHandle,
@@ -208,13 +187,9 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
-            // TODO: Get File name
-
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
-
-            // TODO: ORACLE to see if the string exists in the new file
         }
 
         /// <summary>
@@ -244,8 +219,6 @@ namespace FinalProjectTeam3
         /// </param>
         private static void SaveFile(IntPtr tedAppHandle)
         {
-            // TODO: modify to return filename as string
-            
             // Save the file
             MenuHelper.ClickMenuItem(
                 tedAppHandle,
@@ -279,61 +252,30 @@ namespace FinalProjectTeam3
         private static string GetTextForEditor(TextOption option)
         {
             // get seedValue
+            // int seedValue;
             string returnText = string.Empty;
 
             // if option long, returns long paragraph, if options short, returns short paragraph
-            if (option == TextOption.UniCode)
+            if (option == TextOption.Long)
             {
-                string word = string.Empty;
-                string[] words = new string[2000];
-                for (int runs = 0; runs < 2000; runs++)
-                {
-                    int seedValue = 15;
-                    word = GetTextString(30, out seedValue);
-                    words[runs] = word;
-                }
-               
-                RandomText text = new RandomText(words);
-                text.AddContentParagraphs(3, 3, 4, 5, 10);
-                returnText = text.Content;
-            }
-            
-            else if (option == TextOption.ASCII)
-            {
-                string[] words = 
+                string[] words =
                     {
                         "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "sed",
                         "diam", "nonummy", "nibh", "euismod", "tincidunt", "ut", "laoreet", "dolore", "magna",
                         "aliquam", "erat"
                     };
                 RandomText text = new RandomText(words);
+                text.AddContentParagraphs(2, 2, 3, 5, 10);
+                returnText = text.Content;
+            }
+            else if (option == TextOption.Short)
+            {
+                string[] words = { "anemone", "wagstaff", "man", "the", "for", "and", "a", "with", "bird", "fox" };
+                RandomText text = new RandomText(words);
                 text.AddContentParagraphs(2, 1, 1, 2, 4);
                 returnText = text.Content;
             }
             return returnText;
-        }
-        /// <summary>
-        /// Generic method to generate string of random text characters
-        /// </summary>
-        /// <param name="seed">Seed value</param>
-        /// <returns>A string of unicode characters</returns>
-        private static string GetTextString(int maxCharCount, out int seed)
-        {
-            Random prng = new Random();
-            seed = prng.Next();
-            StringGenerator sg = new StringGenerator();
-            sg.Info.IsSendKeysSafe = true;
-            sg.Info.Seed = seed;
-            sg.Info.MaximumCharacterCount = maxCharCount;
-            sg.Info.RandomizeCharacterCount = false;
-            sg.Info.AllowControlCharacters = false;
-            sg.Info.AllowFormattingCharacters = true;
-            sg.Info.LanguageGroup = 2;
-            sg.Info.UseCustomRange = true;
-            sg.Info.CustomUnicodeStartRange = '0';
-            sg.Info.CustomUnicodeEndRange = 'z';
-            sg.Info.AllowNumberCharacters = true;
-            return sg.Polyglot();
         }
     }
 
@@ -345,7 +287,7 @@ namespace FinalProjectTeam3
         /// <summary>
         /// The short.
         /// </summary>
-        UniCode,
-        ASCII
+        Short,
+        Long
     }
 }
