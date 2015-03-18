@@ -19,18 +19,21 @@ namespace FinalProjectTeam3
         static void Main()
         {
             // Initializes the test suite
-            // TestSuiteSahana sahanaTest = new TestSuiteSahana();
-            TestSuitePeter peterTest = new TestSuitePeter();
+            TestSuiteSahana sahanaTest = new TestSuiteSahana();
+            //TestSuitePeter peterTest = new TestSuitePeter();
+
+            //TestSuiteRyan rtest = new TestSuiteRyan();
+            //rtest.TednPadSaveTest();
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
             // Call the test methods
-            //sahanaTest.UpperCaseFirstLineTestMethod();
-            //sahanaTest.UpperCaseSelectWordTestMethod();
-            //sahanaTest.UpperCaseSelectAllTestMethod();
-            //sahanaTest.LowerCaseFirstLineTestMethod();
-            //sahanaTest.InvertCaseFirstLineTestMethod();
+            sahanaTest.UpperCaseFirstLineTestMethod();
+            sahanaTest.UpperCaseSelectWordTestMethod();
+            sahanaTest.UpperCaseSelectAllTestMethod();
+            sahanaTest.LowerCaseFirstLineTestMethod();
+            sahanaTest.InvertCaseFirstLineTestMethod();
 
             timer.Stop();
             TimeSpan ts = timer.Elapsed;
