@@ -9,6 +9,7 @@ namespace FinalProjectTeam3
     public class RandomText
     {
         static Random _random = new Random();
+
         StringBuilder _builder;
         string[] _words;
 
