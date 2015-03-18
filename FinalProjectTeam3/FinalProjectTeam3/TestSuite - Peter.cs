@@ -80,6 +80,8 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
+            // TODO: Get File name
+
             Logger.Comment("select Word");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             MenuHelper.ClickMenuItem(
@@ -94,13 +96,23 @@ namespace FinalProjectTeam3
                 (int)TEDnotepadHelper.MenuItems.Edit,
                 (int)TEDnotepadHelper.EditMenuItems.Cut);
 
+            //TODO: retrieve the cut word into a string
+
             Logger.Comment("save new file");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            string saveFileName = string.Empty;
+
             SaveFile(tedAppHandle);
+
+            // TODO: Get File name
 
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
+
+            // TODO: ORACLE to see if the first word is cut
+            // Oracle if the file contains the positive search word then the test passes
         }
 
         /// <summary>
@@ -113,7 +125,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.ASCII);
+            string testParagraph = GetTextForEditor(TextOption.UniCode);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -126,6 +138,10 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
+            // TODO: Get File name
+
+            // TODO: Get first line into a string
+
             Logger.Comment("delete line");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             MenuHelper.ClickMenuItem(
@@ -137,9 +153,13 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
+            // TODO: Get File name
+
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
+
+            // TODO: ORACLE to compare files to see if string is in the new file
         }
 
         /// <summary>
@@ -165,7 +185,12 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
-            Logger.Comment("select Line");
+            // TODO: Get File name
+
+
+            // TODO: Copy all text into a string
+
+            Logger.Comment("select All");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             MenuHelper.ClickMenuItem(
                 tedAppHandle,
@@ -187,9 +212,13 @@ namespace FinalProjectTeam3
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             SaveFile(tedAppHandle);
 
+            // TODO: Get File name
+
             Logger.Comment("Close the application");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             ProcessHelper.CloseApplication(tedApp);
+
+            // TODO: ORACLE to see if the string exists in the new file
         }
 
         /// <summary>
@@ -238,6 +267,29 @@ namespace FinalProjectTeam3
             DialogHelper.ClickButton(saveAsDialog, (int)TEDnotepadHelper.SaveAsDialog.Savebtn);
 
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+        /// <summary>
+        /// Generic method to generate string of random text characters
+        /// </summary>
+        /// <param name="seed">Seed value</param>
+        /// <returns>A string of unicode characters</returns>
+        private static string GetTextString(int maxCharCount, out int seed)
+        {
+            Random prng = new Random();
+            seed = prng.Next();
+            StringGenerator sg = new StringGenerator();
+            sg.Info.IsSendKeysSafe = true;
+            sg.Info.Seed = seed;
+            sg.Info.MaximumCharacterCount = maxCharCount;
+            sg.Info.RandomizeCharacterCount = false;
+            sg.Info.AllowControlCharacters = false;
+            sg.Info.AllowFormattingCharacters = true;
+            sg.Info.LanguageGroup = 2;
+            sg.Info.UseCustomRange = true;
+            sg.Info.CustomUnicodeStartRange = '0';
+            sg.Info.CustomUnicodeEndRange = 'z';
+            sg.Info.AllowNumberCharacters = true;
+            return sg.Polyglot();
         }
 
         /// <summary>
