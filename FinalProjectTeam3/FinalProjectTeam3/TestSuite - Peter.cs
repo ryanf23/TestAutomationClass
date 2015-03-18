@@ -167,7 +167,7 @@ namespace FinalProjectTeam3
         /// </summary>
         private static void InsertRecentlyDeletedTestMethod()
         {
-            Logger.Comment("starting test case 3");
+            Logger.Comment("starting test case three");
             IntPtr tedAppHandle;
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
