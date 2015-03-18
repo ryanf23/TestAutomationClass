@@ -67,7 +67,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.Short);
+            string testParagraph = GetTextForEditor(TextOption.UniCode);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -113,7 +113,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.Short);
+            string testParagraph = GetTextForEditor(TextOption.ASCII);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -152,7 +152,7 @@ namespace FinalProjectTeam3
             var tedApp = StartTedAppProcess(out tedAppHandle);
 
             Logger.Comment("get test paragraph");
-            string testParagraph = GetTextForEditor(TextOption.Short);
+            string testParagraph = GetTextForEditor(TextOption.UniCode);
 
             Logger.Comment("paste test paragraph");
             System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -252,25 +252,32 @@ namespace FinalProjectTeam3
         private static string GetTextForEditor(TextOption option)
         {
             // get seedValue
-            // int seedValue;
             string returnText = string.Empty;
 
             // if option long, returns long paragraph, if options short, returns short paragraph
-            if (option == TextOption.Long)
+            if (option == TextOption.UniCode)
             {
-                string[] words =
+                string word = string.Empty;
+                string[] words = new string[2000];
+                for (int runs = 0; runs < 2000; runs++)
+                {
+                    int seedValue = 15;
+                    word = GetTextString(30, out seedValue);
+                    words[runs] = word;
+                }
+
+                RandomText text = new RandomText(words);
+                text.AddContentParagraphs(3, 3, 4, 5, 10);
+                returnText = text.Content;
+            }
+            else if (option == TextOption.ASCII)
+            {
+                string[] words = 
                     {
                         "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "sed",
                         "diam", "nonummy", "nibh", "euismod", "tincidunt", "ut", "laoreet", "dolore", "magna",
                         "aliquam", "erat"
                     };
-                RandomText text = new RandomText(words);
-                text.AddContentParagraphs(2, 2, 3, 5, 10);
-                returnText = text.Content;
-            }
-            else if (option == TextOption.Short)
-            {
-                string[] words = { "anemone", "wagstaff", "man", "the", "for", "and", "a", "with", "bird", "fox" };
                 RandomText text = new RandomText(words);
                 text.AddContentParagraphs(2, 1, 1, 2, 4);
                 returnText = text.Content;
@@ -287,7 +294,7 @@ namespace FinalProjectTeam3
         /// <summary>
         /// The short.
         /// </summary>
-        Short,
-        Long
+        UniCode,
+        ASCII
     }
 }
